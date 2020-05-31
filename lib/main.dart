@@ -26,13 +26,22 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 1;
+  double _counter = 1;
 
+  ///增加数字的一半
   void _incrementCounter() {
     setState(() {
-      _counter = _counter * 2 ;
+      _counter = _counter * 4 ;
     });
   }
+
+    ///数字减少一半
+  void _reduceCounter() {
+    setState(() {
+      _counter = _counter / 2 ;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +60,12 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.display1,
+              style: Theme.of(context).textTheme.display4,
             ),
+            IconButton(
+              icon: Icon(Icons.cake),
+              onPressed: _reduceCounter
+            )
           ],
         ),
       ),
