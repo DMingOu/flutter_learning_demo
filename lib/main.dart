@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_learning_demo/bottomNaviagtionPage.dart';
 
 void main() => runApp(MyApp());
 
@@ -11,7 +13,18 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: '首页'),
+      // home: MyHomePage(title: '首页'),
+      
+      // 设置第一个页面，即启动页
+      initialRoute: '/home',
+      routes: {
+      // 注册一个页面
+      '/home': (context) => MyHomePage(),
+      // 注册第二个页面
+      '/second': (context) => BNVPage(),
+  },
+
+
     );
   }
 }
@@ -42,12 +55,43 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void enterNextPage(){
+    ///第一种方式，通过Navigator.push
+      // Navigator.push(
+      //   context,
+      //   new MaterialPageRoute(builder: (context) => new BNVPage()),
+      // );
+    ///第二种方式：通过命名路由
+      Navigator.pushNamed(context, '/second');
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+          title: const Text('测试页'),
+          automaticallyImplyLeading: false,
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.add_alert),
+              onPressed: () {
+
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.navigate_next),
+              tooltip: '前往下一页',
+              onPressed: (){
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(builder: (context) => new BNVPage()),
+                );
+              },
+            ),
+          ],
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -65,6 +109,11 @@ class _MyHomePageState extends State<MyHomePage> {
             IconButton(
               icon: Icon(Icons.cake),
               onPressed: _reduceCounter
+            ),
+            CupertinoButton.filled(
+              child: Text("跳转下一页"),
+              minSize: 15,
+              onPressed: enterNextPage,
             )
           ],
         ),
