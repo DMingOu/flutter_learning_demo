@@ -9,9 +9,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Leaning Demo',
+      ///全局设置扩散效果
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        splashColor: Color.fromRGBO(0, 0, 0, 0)
       ),
       // home: MyHomePage(title: '首页'),
       
