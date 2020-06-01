@@ -19,10 +19,16 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  cupertino_icons: ^0.1.2
+  toast: ^0.1.5
+
+
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
+
+    
 
 dev_dependencies:
   flutter_test:
@@ -40,6 +46,9 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  # 依赖的对齐方式要注意，否则触发 Error A dependency may only have one source.  
+  assets: 
+    - asset/local_images/
   # To add assets to your application, add an assets section, like this:
   # assets:
   #  - images/a_dot_burr.jpeg

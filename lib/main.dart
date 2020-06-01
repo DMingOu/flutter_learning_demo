@@ -1,11 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_learning_demo/ImagePage.dart';
+import 'package:flutter_learning_demo/TextFieldPage.dart';
 import 'package:flutter_learning_demo/bottomNaviagtionPage.dart';
+import 'package:toast/toast.dart';
+
 
 void main() => runApp(MyApp());
 
+enum PagesName{ first , second , third , fourth, fifth}
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
+  static final imagePageName = '/third';
+  static final textFieldPageName = '/textField';
+
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,6 +34,9 @@ class MyApp extends StatelessWidget {
       '/home': (context) => MyHomePage(),
       // 注册第二个页面
       '/second': (context) => BNVPage(),
+      imagePageName:(context) => ImagePage(),
+
+      textFieldPageName: (context) => TextFieldPage()
   },
 
 
@@ -40,7 +54,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  double _counter = 1;
+    double _counter = 1;
+
+    ///菜单选择项名字
+    var _menuSelectionIndex;
 
   ///增加数字的一半
   void _incrementCounter() {
@@ -66,6 +83,30 @@ class _MyHomePageState extends State<MyHomePage> {
       Navigator.pushNamed(context, '/second');
   }
 
+  void enterThirdPage(){
+
+      Navigator.pushNamed(context, MyApp.imagePageName);
+  }
+
+  void enterPageByName(var pageName){
+     switch(pageName){
+        case PagesName.first:
+          Navigator.pushNamed(context,  '/home');
+          break;
+        case PagesName.second:
+          Navigator.pushNamed(context, '/second');
+          break;        
+        case PagesName.third:
+          Navigator.pushNamed(context, MyApp.imagePageName);
+          break;        
+        case PagesName.fourth:
+          Navigator.pushNamed(context, MyApp.textFieldPageName);   
+          break;
+        default: 
+          break;
+     }
+  }
+
 
 
 
@@ -82,16 +123,45 @@ class _MyHomePageState extends State<MyHomePage> {
 
               },
             ),
-            IconButton(
-              icon: const Icon(Icons.navigate_next),
-              tooltip: '前往下一页',
-              onPressed: (){
-                Navigator.push(
-                    context,
-                    new MaterialPageRoute(builder: (context) => new BNVPage()),
-                );
+            // IconButton(
+            //   icon: const Icon(Icons.navigate_next),
+            //   tooltip: '前往下一页',
+            //   onPressed: (){
+            //     Navigator.push(
+            //         context,
+            //         new MaterialPageRoute(builder: (context) => new BNVPage()),
+            //     );
+            //   },
+            // ),
+            PopupMenuButton<PagesName>(
+              icon: Icon(Icons.navigate_next),
+              onSelected: (PagesName result) {
+                 setState(() { 
+                   //更新菜单选中项
+                   _menuSelectionIndex = result;
+                  enterPageByName(result);
+                }); 
               },
-            ),
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<PagesName>>[
+                const PopupMenuItem<PagesName>(
+                  value: PagesName.first,
+                  child: Text('第一页 首页'),
+                ),
+                const PopupMenuItem<PagesName>(
+                  value: PagesName.second,
+                  child: Text('第二页 导航页'),
+                ),
+                const PopupMenuItem<PagesName>(
+                  value: PagesName.third,
+                  child: Text('第三页 图片页'),
+                ),
+                const PopupMenuItem<PagesName>(
+                  value: PagesName.fourth,
+                  child: Text('第四页 文本输入页 '),
+
+                ),
+              ],
+            )           
           ],
       ),
       body: Center(
@@ -101,20 +171,23 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              '按下数字就翻倍',
+              '按下右下角按钮，数字就翻倍',
             ),
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.display4,
             ),
             IconButton(
-              icon: Icon(Icons.cake),
+              icon: Icon(Icons.thumb_down),
               onPressed: _reduceCounter
             ),
             CupertinoButton.filled(
-              child: Text("跳转下一页"),
+              child: Text("ios风格的按钮"),
               minSize: 15,
-              onPressed: enterNextPage,
+              onPressed: (){
+                //弹出一个Toast
+                Toast.show("Toast 弹出", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
+              },
             )
           ],
         ),
