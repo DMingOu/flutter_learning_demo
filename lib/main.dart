@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_learning_demo/ImagePage.dart';
+import 'package:flutter_learning_demo/PageData.dart';
 import 'package:flutter_learning_demo/TextFieldPage.dart';
 import 'package:flutter_learning_demo/bottomNaviagtionPage.dart';
 import 'package:toast/toast.dart';
@@ -45,19 +46,27 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
 
-  final String title;
+  final pageTitle;
+  //构造函数
+  MyHomePage({Key key, this.pageTitle}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+
     double _counter = 1;
 
+    //接收返回的参数
+    PageData receivedata;
+
+
+
     ///菜单选择项名字
-    var _menuSelectionIndex;
+    // var _menuSelectionIndex;
 
   ///增加数字的一半
   void _incrementCounter() {
@@ -88,7 +97,7 @@ class _MyHomePageState extends State<MyHomePage> {
       Navigator.pushNamed(context, MyApp.imagePageName);
   }
 
-  void enterPageByName(var pageName){
+  void enterPageByName(var pageName) async {
      switch(pageName){
         case PagesName.first:
           Navigator.pushNamed(context,  '/home');
@@ -100,7 +109,32 @@ class _MyHomePageState extends State<MyHomePage> {
           Navigator.pushNamed(context, MyApp.imagePageName);
           break;        
         case PagesName.fourth:
-          Navigator.pushNamed(context, MyApp.textFieldPageName);   
+          //设置传入TextFieldPage的参数
+          PageData textPageData = new PageData(contentString : 'come from HomePage');
+          // var backReceiveResult = await Navigator.pushNamed(
+          //             context,
+          //             MyApp.textFieldPageName,
+          //             arguments: textPageData
+          //           );
+          // if(backReceiveResult != null){
+          //   setState(() {
+          //     receivedata = backReceiveResult ;
+          //   });
+          // }
+          Navigator.push(context, new MaterialPageRoute(
+                                  builder: (BuildContext context){
+            print("121  ${textPageData.contentString} ");
+            return TextFieldPage(
+                    pageData: textPageData,
+                  );
+                }
+            )).then( (receiveBackData){
+              print("接收到返回的数据了  ");
+              setState(() {
+                receivedata = receiveBackData;
+              });
+            } 
+          );
           break;
         default: 
           break;
@@ -138,7 +172,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onSelected: (PagesName result) {
                  setState(() { 
                    //更新菜单选中项
-                   _menuSelectionIndex = result;
+                  //  _menuSelectionIndex = result;
                   enterPageByName(result);
                 }); 
               },
@@ -170,6 +204,14 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            ///显示页面回参的内容
+            Text(
+              receivedata != null ? receivedata.contentString : '尚未接收页面回参内容' ,
+              style: TextStyle(
+                fontSize : 18,
+                color : Colors.teal,
+              ),
+            ),
             Text(
               '按下右下角按钮，数字就翻倍',
             ),
