@@ -10,41 +10,42 @@ class GoodJobWidget extends StatefulWidget {
 
 class GoodJobWidgetState extends State<GoodJobWidget> {
 
-  bool _isGood = true;
+  bool _isLike = false;
   
-  int _goodCount = 0;
+  int _likeCount = 0;
 
   
-  ///点击事件
+  ///点赞按钮点击事件
   void _toggleFavorite() {
     // 通过 setState() 更新数据
     // 组件树就会自动刷新了
     setState(() {
-      if (_isGood) {
-        _goodCount -= 1;
-        _isGood = false;
+      if (_isLike) {
+        _likeCount -= 1;
+        _isLike = false;
       } else {
-        _goodCount += 1;
-        _isGood = true;
+        _likeCount += 1;
+        _isLike = true;
       }
     });
   }
 
   ///刷新点赞数
   void getLikeCount(){
+    ///wait中的任务都完成才会执行 Future.then((){})
     Future.wait([
       Future.delayed(new Duration(milliseconds: 2000),(){
-        print("加 50 -------${new DateTime.now()}  ");
+        // print("加 50 -------${new DateTime.now()}  ");
           return 50;
       }),
       Future.delayed(new Duration(milliseconds: 4000),(){
-        print("减 5 -------${new DateTime.now()}  ");
+        // print("减 5 -------${new DateTime.now()}  ");
         return -5;
       })
     ]).then( (results){
       var timer;
       ///results这个List里面的内容是执行wait中返回的对象们,会根据返回的类型动态改变List<T>的T
-      _goodCount = _goodCount + results[0] + results[1]  ;
+      _likeCount = _likeCount + results[0] + results[1]  ;
       timer = Timer.periodic(
           const Duration(milliseconds: 4500), (Void) {
               // DateTime nowTime = new DateTime.now();
@@ -52,14 +53,14 @@ class GoodJobWidgetState extends State<GoodJobWidget> {
             ///定时任务，每2000ms增加 1 
               Future.delayed(new Duration(milliseconds: 2000),(){
                 // print("加 1 -------${new DateTime.now()}  ");
-                _goodCount++;
+                _likeCount++;
               });             
               ///点赞数变化，调用setState会更新视图
               setState(() {
                 // print('更新点赞数');
               });
               ///当点赞数目超过1000就停止轮询任务
-              if(_goodCount >= pow(10, 3)){
+              if(_likeCount >= pow(10, 3)){
                 (timer as Timer).cancel();
               }
           });
@@ -83,14 +84,14 @@ class GoodJobWidgetState extends State<GoodJobWidget> {
             padding: EdgeInsets.all(0),
             child: IconButton(
               icon: Icon(Icons.thumb_up) ,
-              color: (_isGood ?  Colors.red[500]: Colors.grey[400]) ,
+              color: (_isLike ?  Colors.red[500]: Colors.grey[400]) ,
               onPressed: _toggleFavorite,
             ),
           ),
           SizedBox(
             width: 180,
             child: Container(
-              child: Text('$_goodCount'),
+              child: Text('$_likeCount'),
             ),
           ),
         ],

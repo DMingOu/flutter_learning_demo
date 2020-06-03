@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_learning_demo/CustomWidgetPage.dart';
 import 'package:flutter_learning_demo/ImagePage.dart';
+import 'package:flutter_learning_demo/NetTest.dart';
 import 'package:flutter_learning_demo/PageData.dart';
 import 'package:flutter_learning_demo/TextFieldPage.dart';
 import 'package:flutter_learning_demo/bottomNaviagtionPage.dart';
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
 
   static final imagePageName = '/third';
   static final textFieldPageName = '/textField';
-
+  static final netPageName = '/netPage';
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +39,9 @@ class MyApp extends StatelessWidget {
       '/second': (context) => BNVPage(),
       imagePageName:(context) => ImagePage(),
 
-      textFieldPageName: (context) => TextFieldPage()
+      textFieldPageName: (context) => TextFieldPage() ,
+
+      netPageName:(context) => NetTestPage(),
   },
 
 
@@ -137,6 +140,9 @@ class _MyHomePageState extends State<MyHomePage> {
             } 
           );
           break;
+        case PagesName.fifth:
+          Navigator.pushNamed(context, MyApp.netPageName);
+          break;                
         default: 
           break;
      }
@@ -193,7 +199,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 const PopupMenuItem<PagesName>(
                   value: PagesName.fourth,
                   child: Text('第四页 文本输入页 '),
-
+                ),
+                const PopupMenuItem<PagesName>(
+                  value: PagesName.fifth,
+                  child: Text('第五页 网络测试页'),
                 ),
               ],
             )           
