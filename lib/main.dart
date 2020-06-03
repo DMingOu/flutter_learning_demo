@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_learning_demo/CustomWidgetPage.dart';
 import 'package:flutter_learning_demo/ImagePage.dart';
 import 'package:flutter_learning_demo/PageData.dart';
 import 'package:flutter_learning_demo/TextFieldPage.dart';
@@ -204,6 +205,9 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            ///自定义StatefulWidget
+            GoodJobWidget(),
+
             ///显示页面回参的内容
             Text(
               receivedata != null ? receivedata.contentString : '尚未接收页面回参内容' ,
