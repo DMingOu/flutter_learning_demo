@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'dart:wasm';
 
 import 'package:flutter/material.dart';
 

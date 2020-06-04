@@ -1,10 +1,14 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter_learning_demo/models/Response.dart';
+import 'package:flutter_learning_demo/models/Response.dart' as model;
 import 'package:flutter_learning_demo/models/hot_word.dart';
 import 'package:flutter_learning_demo/models/wan_android_user.dart';
+import 'package:flutter_learning_demo/net/ApiManager.dart';
+import 'package:flutter_learning_demo/net/CustomInterceptors.dart';
+import 'package:flutter_learning_demo/net/HttpUtil.dart';
 
 
 
@@ -43,7 +47,7 @@ class NetTestPageState extends State<NetTestPage> {
             responseString = responseBody;
           });
 
-          Response responseData = Response.parse(responseBody, HotWord.fromMap);
+          model.Response responseData = model.Response.parse(responseBody, HotWord.fromMap);
           HotWord hw = responseData?.result?.content;
           print(hw?.data.toString());
       }
@@ -72,6 +76,22 @@ class NetTestPageState extends State<NetTestPage> {
       httpClient.close();
   }
 
+  void dioRequestData() async{
+
+      WanAndroidUser user2 = await ApiManager.requestLogin('123456789@qq.com', '123456');
+      setState(() {
+            responseString = user2.data.nickname;
+      });
+
+      var response =  await HttpUtil.getInstance(baseUrl:'http://47.102:6666').get('/user/checkCode/123456789/123456');
+      print(response.toString());
+
+      WanAndroidUser user = await ApiManager.requestLogin('758502274@qq.com', 'ytmz8901');
+      setState(() {
+            responseString = user.data.id.toString();
+      });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -96,8 +116,9 @@ class NetTestPageState extends State<NetTestPage> {
   @override
   void initState() {
     super.initState();
-    ///获取王国罗数据
-    getRequsetData();
+    ///获取网络数据
+    // getRequsetData();
+    dioRequestData();
   }
   
   @override

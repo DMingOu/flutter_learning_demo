@@ -1,4 +1,3 @@
-import 'package:flutter_learning_demo/models/Response.dart';
 
 class HotWord {
   List<HotWordData> data;

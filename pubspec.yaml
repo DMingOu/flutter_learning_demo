@@ -21,7 +21,8 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^0.1.2
   toast: ^0.1.5
-
+  dio: ^3.0.9
+  dio_cookie_manager: ^1.0.0
 
 
 
