@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_learning_demo/CustomWidget/RotateContainer.dart';
 import 'package:flutter_learning_demo/CustomWidgetPage.dart';
 import 'package:flutter_learning_demo/ImagePage.dart';
 import 'package:flutter_learning_demo/NetTest.dart';
@@ -51,7 +52,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends StatefulWidget  {
 
   final pageTitle;
   //构造函数
@@ -61,7 +62,7 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
 
     double _counter = 1;
@@ -71,6 +72,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
     var _scaffoldkey = new GlobalKey<ScaffoldState>();
 
+    ///动画控制器
+    AnimationController controller;
 
 
     ///菜单选择项名字
@@ -152,7 +155,11 @@ class _MyHomePageState extends State<MyHomePage> {
      }
   }
 
-
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
+  }
 
 
   @override
@@ -213,9 +220,15 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.display4,
             ),
-            IconButton(
-              icon: Icon(Icons.thumb_down),
-              onPressed: _reduceCounter
+            RotateContainer(
+              rotated: true,
+              infinityRotated: true,
+              endAngle: 180,
+              duration: 5,
+              child:IconButton(
+                icon: Icon(Icons.thumb_down),
+                onPressed: _reduceCounter
+              ),
             ),
             CupertinoButton.filled(
               child: Text("ios风格的按钮"),
@@ -287,13 +300,25 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: SizedBox(
                   width: 120.0,
                   height: 120.0,
-                  child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    child: Center(
-                      child:FlutterLogo(
-                              size: 100,
-                            ),
+                  child:
+                  RotationTransition(
+                    //设置动画的旋转中心
+                    alignment: Alignment.center,
+                    //动画控制器
+                    turns: getAnimationController(),
+                    child:CircleAvatar(
+                      backgroundColor: Colors.white,
+                      child: Center(
+                        //将要执行动画的子view
+                        child: Image.asset(
+                          // 'asset/local_images/img1.webp',
+                          'asset/local_images/avatar.png',
+                          width: 120,
+                          height: 120,
+                        
+                        )                                
                     )
+                  ),
                   ),
                 ),
               ),
@@ -377,9 +402,41 @@ class _MyHomePageState extends State<MyHomePage> {
         if(isOpen){
           // Toast.show('Drawer 被打开', context);
           print('Drawer 被打开');
+          controller?.forward();
         }else {
           // Toast.show('Drawer 被关闭', context);
           print('Drawer 被关闭');
+          // controller?.dispose();
         }
+    }
+
+    AnimationController getAnimationController(){
+      //动画开始、结束、向前移动或向后移动时会调用StatusListener
+        if(controller == null || controller?.isDismissed==true){
+          //需要 类执行 with TickerProviderStateMixin ，混淆
+          controller = AnimationController(duration: const Duration(seconds: 5), vsync: this);
+          controller.addStatusListener((status) {
+          if (status == AnimationStatus.completed) {
+            //动画从 controller.forward() 正向执行 结束时会回调此方法
+            print("status is completed");
+            //重置起点
+            controller.reset();
+            //开启
+            controller.forward();
+          } else if (status == AnimationStatus.dismissed) {
+            //动画从 controller.reverse() 反向执行 结束时会回调此方法
+            print("status is dismissed");
+          } else if (status == AnimationStatus.forward) {
+            print("status is forward");
+            //执行 controller.forward() 会回调此状态
+          } else if (status == AnimationStatus.reverse) {
+            //执行 controller.reverse() 会回调此状态
+            print("status is reverse");
+          }
+        });
+      }
+      //返回 设置好的 AnimationController
+      return controller;
+
     }
 }

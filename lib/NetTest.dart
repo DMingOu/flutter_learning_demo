@@ -80,7 +80,7 @@ class NetTestPageState extends State<NetTestPage> {
 
       WanAndroidUser user2 = await ApiManager.requestLogin('123456789@qq.com', '123456');
       setState(() {
-            responseString = user2.data.nickname;
+            responseString = user2?.data?.nickname;
       });
 
       var response =  await HttpUtil.getInstance(baseUrl:'http://47.102:6666').get('/user/checkCode/123456789/123456');
