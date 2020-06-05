@@ -8,6 +8,8 @@ import 'package:flutter_learning_demo/TextFieldPage.dart';
 import 'package:flutter_learning_demo/bottomNaviagtionPage.dart';
 import 'package:toast/toast.dart';
 
+import 'CustomWidget/CustomDrawer.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -66,6 +68,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
     //接收返回的参数
     PageData receivedata;
+
+    var _scaffoldkey = new GlobalKey<ScaffoldState>();
 
 
 
@@ -154,9 +158,23 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldkey,
+
       appBar: AppBar(
           title: const Text('测试页'),
-          automaticallyImplyLeading: false,
+          ///automaticallyImplyLeading设为false会隐藏Leading的按钮
+          automaticallyImplyLeading: true,
+          leading: IconButton(
+            icon:  Image.asset(
+            "asset/local_images/img1.webp",
+            width: 30 ,
+            height: 30, 
+          ),
+            onPressed: (){
+              _handlerDrawerButton(context);
+            },
+          ),
+
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.add_alert),
@@ -164,50 +182,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
               },
             ),
-            // IconButton(
-            //   icon: const Icon(Icons.navigate_next),
-            //   tooltip: '前往下一页',
-            //   onPressed: (){
-            //     Navigator.push(
-            //         context,
-            //         new MaterialPageRoute(builder: (context) => new BNVPage()),
-            //     );
-            //   },
-            // ),
-            PopupMenuButton<PagesName>(
-              icon: Icon(Icons.navigate_next),
-              onSelected: (PagesName result) {
-                 setState(() { 
-                   //更新菜单选中项
-                  //  _menuSelectionIndex = result;
-                  enterPageByName(result);
-                }); 
-              },
-              itemBuilder: (BuildContext context) => <PopupMenuEntry<PagesName>>[
-                const PopupMenuItem<PagesName>(
-                  value: PagesName.first,
-                  child: Text('第一页 首页'),
-                ),
-                const PopupMenuItem<PagesName>(
-                  value: PagesName.second,
-                  child: Text('第二页 导航页'),
-                ),
-                const PopupMenuItem<PagesName>(
-                  value: PagesName.third,
-                  child: Text('第三页 图片页'),
-                ),
-                const PopupMenuItem<PagesName>(
-                  value: PagesName.fourth,
-                  child: Text('第四页 文本输入页 '),
-                ),
-                const PopupMenuItem<PagesName>(
-                  value: PagesName.fifth,
-                  child: Text('第五页 网络测试页'),
-                ),
-              ],
-            )           
+            //弹出菜单
+            _popUpMenu,
           ],
       ),
+
+      drawer: _drawer,
+
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
@@ -254,4 +235,151 @@ class _MyHomePageState extends State<MyHomePage> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+
+  ///弹出式菜单
+  get _popUpMenu => PopupMenuButton<PagesName>(
+              icon: Icon(Icons.navigate_next),
+              onSelected: (PagesName result) {
+                 setState(() { 
+                   //更新菜单选中项
+                  //  _menuSelectionIndex = result;
+                  enterPageByName(result);
+                }); 
+              },
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<PagesName>>[
+                const PopupMenuItem<PagesName>(
+                  value: PagesName.first,
+                  child: Text('第一页 首页'),
+                ),
+                const PopupMenuItem<PagesName>(
+                  value: PagesName.second,
+                  child: Text('第二页 导航页'),
+                ),
+                const PopupMenuItem<PagesName>(
+                  value: PagesName.third,
+                  child: Text('第三页 图片页'),
+                ),
+                const PopupMenuItem<PagesName>(
+                  value: PagesName.fourth,
+                  child: Text('第四页 文本输入页 '),
+                ),
+                const PopupMenuItem<PagesName>(
+                  value: PagesName.fifth,
+                  child: Text('第五页 网络测试页'),
+                ),
+              ],
+  );
+
+    ///抽屉Drawer
+    get _drawer => CustomDrawer(
+        callback: _handleDrawerStateCallback ,
+        child: ListView(
+            ///edit start
+          padding: EdgeInsets.zero,
+            ///edit end
+          children: <Widget>[
+            ///Drawer 头部控件
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.lightBlueAccent,
+              ),
+              child: Center(
+                child: SizedBox(
+                  width: 120.0,
+                  height: 120.0,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    child: Center(
+                      child:FlutterLogo(
+                              size: 100,
+                            ),
+                    )
+                  ),
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('设置'),
+              onTap: drawerTileClick,
+            ),
+            ListTile(
+              leading: Icon(Icons.book),
+              title: Text('阅读2'),
+              onTap: drawerTileClick,
+            ),
+            ListTile(
+              leading: Icon(Icons.local_cafe),
+              title: Text('阅读3'),
+              onTap: drawerTileClick,
+            ),
+            ListTile(
+              leading: Icon(Icons.hotel),
+              title: Text('阅读4'),
+              onTap: drawerTileClick,
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('阅读5'),
+              onTap: drawerTileClick,
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('阅读6'),
+              onTap: drawerTileClick,
+            ),
+            ListTile(
+              leading: Icon(Icons.important_devices),
+              title: Text('阅读7'),
+              onTap: drawerTileClick,
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('阅读8'),
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('阅读9'),
+            ),            
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('阅18'),
+            ),            
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('阅读28'),
+            ),           
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('阅读36'),
+            ),            
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('阅读566'),
+            ),
+          ],
+        ),
+    );
+
+    void drawerTileClick(){
+      Toast.show("点击了Drawer条目", context);
+    }
+
+    ///当自定义Drawer的呼出按钮时给Leading的点击事件
+    void _handlerDrawerButton(BuildContext context) {
+      // Scaffold.of(context).openDrawer();
+      _scaffoldkey.currentState.openDrawer();
+    }
+
+    ///监听Drawer的打开时刻和关闭时刻
+    ///isOpen true代表 Drawer已经出现在屏幕里，false代表Drawer完全隐藏
+    void _handleDrawerStateCallback(bool isOpen){
+        if(isOpen){
+          // Toast.show('Drawer 被打开', context);
+          print('Drawer 被打开');
+        }else {
+          // Toast.show('Drawer 被关闭', context);
+          print('Drawer 被关闭');
+        }
+    }
 }

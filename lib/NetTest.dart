@@ -1,4 +1,4 @@
-import 'package:dio/dio.dart';
+// import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'dart:io';
@@ -7,7 +7,7 @@ import 'package:flutter_learning_demo/models/Response.dart' as model;
 import 'package:flutter_learning_demo/models/hot_word.dart';
 import 'package:flutter_learning_demo/models/wan_android_user.dart';
 import 'package:flutter_learning_demo/net/ApiManager.dart';
-import 'package:flutter_learning_demo/net/CustomInterceptors.dart';
+// import 'package:flutter_learning_demo/net/CustomInterceptors.dart';
 import 'package:flutter_learning_demo/net/HttpUtil.dart';
 
 
